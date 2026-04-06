@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Domain\Feed\Models;
+namespace App\Models\Feed;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,6 +10,7 @@ class FeedSource extends Model
 {
     protected $fillable = [
         'title',
+        'custom_title',
         'url',
         'site_url',
         'description',

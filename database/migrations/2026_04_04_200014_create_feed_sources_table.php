@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('feed_sources', function (Blueprint $table) {
             $table->id();
 
-            $table->string('title');
+            $table->string('title')->nullable();
+            $table->string('custom_title');
             $table->string('url')->unique();
             $table->string('site_url')->nullable();
             $table->text('description')->nullable();
