@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\Feed\FeedSource;
+use Illuminate\Database\Seeder;
 
 class FeedSourceSeeder extends Seeder
 {
@@ -20,7 +19,7 @@ class FeedSourceSeeder extends Seeder
                 'language' => 'lv',
             ],
             [
-                'custom_title' => 'TVNET',
+                'custom_title' => 'TVNET Rus',
                 'url' => 'https://rus.tvnet.lv/rss',
                 'language' => 'ru',
             ],

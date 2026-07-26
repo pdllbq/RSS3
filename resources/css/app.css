@@ -1,4 +1,12 @@
-@import 'tailwindcss';
+/* @import 'tailwindcss'; */
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import './components/default/navbar.css';
+@import './components/default/footer.css';
+@import './components/default/feedItems.css';
+@import './components/default/pagination.css';
+@import './default.css';
+
+
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';

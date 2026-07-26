@@ -1,0 +1,29 @@
+.feed-item-image {
+    width: 160px;
+    height: 100px;
+    flex-shrink: 0;
+}
+
+.feed-item {
+    border: 2px solid #1a212e;
+    border-radius: 8px;
+    background-color: #0a121d;
+    cursor: pointer;
+}
+
+.feed-item-content {
+    background-color: #0a121d;
+}
+
+.feed-item-date {
+    color: #8b919e;
+}
+
+.feed-item-title a{
+    text-decoration: none;
+    color: #fff;
+}
+
+.feed-item-title:hover{
+    text-decoration: underline;
+}

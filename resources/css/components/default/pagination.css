@@ -1,0 +1,19 @@
+.pagination {
+    --bs-pagination-bg: #0a121d;
+    --bs-pagination-border-color: #1a212e;
+
+    --bs-pagination-color: #e5e7eb;
+
+    --bs-pagination-hover-bg: #162133;
+    --bs-pagination-hover-border-color: #2d3748;
+    --bs-pagination-hover-color: #fff;
+
+    /* Активная */
+    --bs-pagination-active-bg: #23324d;
+    --bs-pagination-active-border-color: #2f4366;
+    --bs-pagination-active-color: #fff;
+
+    --bs-pagination-disabled-bg: #0a121d;
+    --bs-pagination-disabled-border-color: #1a212e;
+    --bs-pagination-disabled-color: #6c757d;
+}
