@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
 
 
-Schedule::command('feed:sync')->hourlyAt(34);
+Schedule::command('feed:sync')->hourly();
 
 Schedule::command('items:generate-embedding')->everyMinute();
 
