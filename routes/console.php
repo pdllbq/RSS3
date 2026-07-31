@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
 
 
-Schedule::command('feed:sync')->everyMinute()->appendOutputTo(storage_path('logs/feed-sync.log'));
+Schedule::command('feed:sync')->everyFiveMinutes();
 
 Schedule::command('items:generate-embedding')->everyMinute();
 
