@@ -2,9 +2,7 @@
 
 namespace App\Models\Feed;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -40,6 +38,8 @@ class FeedItem extends Model
         'published_at' => 'datetime',
         'fetched_at' => 'datetime',
         'is_read' => 'boolean',
+        'is_category_checked' => 'boolean',
+        'needs_category_check' => 'boolean',
         'is_cluster_main' => 'boolean',
         'raw_payload' => 'array',
     ];

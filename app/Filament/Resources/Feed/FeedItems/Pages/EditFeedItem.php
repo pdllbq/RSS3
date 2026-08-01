@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Feed\FeedItems\Pages;
 
+use App\Domain\Feed\Actions\SetManualGlobalCategoryAction;
 use App\Filament\Resources\Feed\FeedItems\FeedItemResource;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ViewAction;
@@ -17,5 +18,23 @@ class EditFeedItem extends EditRecord
             ViewAction::make(),
             DeleteAction::make(),
         ];
+    }
+
+    protected function afterSave(): void
+    {
+        if (! $this->record->needs_category_check) {
+            return;
+        }
+
+        if (! $this->record->global_category_id) {
+            app(SetManualGlobalCategoryAction::class)->skipGlobalCategory($this->record);
+
+            return;
+        }
+
+        app(SetManualGlobalCategoryAction::class)->execute(
+            $this->record,
+            (int) $this->record->global_category_id,
+        );
     }
 }

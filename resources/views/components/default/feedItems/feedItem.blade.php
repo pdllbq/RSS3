@@ -14,8 +14,12 @@
                     <h4 class="feed-item-title"><a target="_blank" href="{{ $feedItem->url }}">{{ $feedItem->title }}</a></h4>
                     <p class="feed-item-description">{{ $feedItem->description }}</p>
                 </div>
-                <div class="col-auto text-end feed-item-date">
-                    <p>{{ $feedItem->formattedPublishedAt }}</p>
+                <div class="col-auto feed-item-date d-flex flex-column align-items-end">
+                    <span>{{ $feedItem->formattedPublishedAt }}</span>
+
+                    <a href="/s" class="small text-decoration-none mt-auto" title="System info">
+                            S
+                    </a>
                 </div>
             </article>
         </div>
