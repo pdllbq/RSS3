@@ -35,7 +35,7 @@ class GenerateEmbeddingCommand extends Command
 
     protected function oneItem()
     {
-        $item = FeedItem::doesntHave('embedding')->first();
+        $item = FeedItem::doesntHave('embedding')->orderBy('id', 'DESC')->first();
 
         if (! $item) {
             $this->info('No items found that need embeddings.');
@@ -54,7 +54,7 @@ class GenerateEmbeddingCommand extends Command
 
     protected function allItems()
     {
-        $query = FeedItem::doesntHave('embedding')->orderBy('id', 'ASC');
+        $query = FeedItem::doesntHave('embedding')->orderBy('id', 'DESC');
 
         $count = $query->count();
 
