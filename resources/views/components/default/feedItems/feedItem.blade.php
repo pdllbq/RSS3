@@ -18,7 +18,7 @@
                     <span>{{ $feedItem->formattedPublishedAt }}</span>
 
                     <a href="/s" class="small text-decoration-none mt-auto" title="System info">
-                            S
+                            s
                     </a>
                 </div>
             </article>
