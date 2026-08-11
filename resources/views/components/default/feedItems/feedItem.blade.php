@@ -17,7 +17,7 @@
                 <div class="col-auto feed-item-date d-flex flex-column align-items-end">
                     <span>{{ $feedItem->formattedPublishedAt }}</span>
 
-                    <a href="/s" class="small text-decoration-none mt-auto" title="System info">
+                    <a href="{{ route('system.info', ['itemId' => $feedItem->id]) }}" class="small text-decoration-none mt-auto" title="System info">
                             s
                     </a>
                 </div>

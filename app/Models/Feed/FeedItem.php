@@ -2,6 +2,7 @@
 
 namespace App\Models\Feed;
 
+use App\Models\Ai\AiRequestLog;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -95,6 +96,11 @@ class FeedItem extends Model
     public function cluster(): BelongsTo
     {
         return $this->belongsTo(FeedItemCluster::class, 'feed_item_cluster_id');
+    }
+
+    public function aiRequestLog(): BelongsTo
+    {
+        return $this->belongsTo(AiRequestLog::class, 'ai_request_log_id');
     }
 
     protected function formattedPublishedAt(): Attribute

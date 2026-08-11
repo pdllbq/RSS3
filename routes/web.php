@@ -8,3 +8,6 @@ Route::redirect('/', '/ru'); //In future, middleware will be used.
 Route::group(['prefix' => '{lang}', 'where' => ['lang' => '[a-zA-Z]{2}']], function () {
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 });
+
+//System info
+Route::get('/s/{itemId}', [App\Http\Controllers\SystemInfoController::class, 'index'])->name('system.info');
