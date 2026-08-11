@@ -78,9 +78,9 @@ return [
     |
     */
 
-    'locale' => env('APP_LOCALE', 'en'),
+    'locale' => env('APP_LOCALE', 'ru'),
 
-    'supported_locales' => array_filter(explode(',', env('APP_SUPPORTED_LOCALES', 'en,ru'))),
+    'supported_locales' => array_filter(explode(',', env('APP_SUPPORTED_LOCALES', 'ru,lv'))),
 
     'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),
 

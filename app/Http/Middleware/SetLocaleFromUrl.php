@@ -15,7 +15,7 @@ class SetLocaleFromUrl
     {
         $segments = $request->segments();
         $locale = $segments[0] ?? null;
-        $supportedLocales = array_values(config('app.supported_locales', ['en', 'ru']));
+        $supportedLocales = array_values(config('app.supported_locales', ['ru', 'lv']));
 
         if ($locale && in_array($locale, $supportedLocales, true)) {
             App::setLocale($locale);

@@ -25,7 +25,9 @@ class MatchClusterCommand extends Command
     public function handle()
     {
         // Порог схожести: совпадения с similarity >= $threshold считаются похожими
-        $threshold = 0.93;
+        $threshold = 0.717;
+        //0.7170
+        //0.6769
         $processAll = $this->option('all');
 
         // Выбираем элементы, у которых есть эмбеддинг и которые ещё не проверены
