@@ -1,5 +1,5 @@
 <x-layouts.default.app>
-    <x-slot name="title">Home</x-slot>
+    <x-slot name="title">{{ __('home.Title') }}</x-slot>
 
     <div class="container">
         <div class="row">
