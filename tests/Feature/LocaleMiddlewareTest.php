@@ -31,6 +31,17 @@ class LocaleMiddlewareTest extends TestCase
         $response->assertSee('lv');
     }
 
+    public function test_home_page_shows_language_switcher_for_supported_locales(): void
+    {
+        $response = $this->get('/ru');
+
+        $response->assertOk();
+        $response->assertSee('href="http://localhost/ru"', false);
+        $response->assertSee('href="http://localhost/lv"', false);
+        $response->assertSee('language-switcher__link--active', false);
+        $response->assertSee('<html lang="ru">', false);
+    }
+
     public function test_it_does_not_set_english_locale_while_unsupported(): void
     {
         Route::get('/en', function () {
