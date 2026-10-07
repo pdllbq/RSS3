@@ -2,11 +2,13 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Route;
 use Tests\TestCase;
 
 class LocaleMiddlewareTest extends TestCase
 {
+    use RefreshDatabase;
     public function test_it_sets_locale_from_first_url_segment(): void
     {
         Route::get('/ru', function () {

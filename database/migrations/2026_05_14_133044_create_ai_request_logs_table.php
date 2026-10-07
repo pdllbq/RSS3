@@ -30,10 +30,17 @@ return new class extends Migration
 
             $table->text('error_message')->nullable();
 
-            $table->jsonb('request_payload')->nullable();
-            $table->jsonb('response_payload')->nullable();
-            $table->jsonb('messages')->nullable(); // For chat-based interactions, store the message history
-            $table->vector('embedding_1024', 1024)->nullable();
+            if (\Illuminate\Support\Facades\DB::getDriverName() === 'pgsql') {
+                $table->jsonb('request_payload')->nullable();
+                $table->jsonb('response_payload')->nullable();
+                $table->jsonb('messages')->nullable(); // For chat-based interactions, store the message history
+                $table->vector('embedding_1024', 1024)->nullable();
+            } else {
+                $table->json('request_payload')->nullable();
+                $table->json('response_payload')->nullable();
+                $table->json('messages')->nullable();
+                $table->json('embedding_1024')->nullable();
+            }
 
             $table->boolean('is_valid_json')->nullable();
 

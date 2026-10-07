@@ -1,7 +1,7 @@
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <article data-url="{{ $feedItem->url }}" class="d-flex gap-3 py-3 px-3 my-2 feed-item">
+            <article data-url="{{ route('outbound.go', ['id' => $feedItem->id]) }}" class="d-flex gap-3 py-3 px-3 my-2 feed-item">
                 <div class=" col-auto feed-item-image-container">
                     <img src="{{ $feedItem->image_url }}" alt="{{ $feedItem->title }}" class="feed-item-image object-fit-cover rounded" />
                 </div>
@@ -11,7 +11,7 @@
                             {{ $feedItem->feedSource->name() }}
                         </a>
                     </p>
-                    <h4 class="feed-item-title"><a target="_blank" href="{{ $feedItem->url }}">{{ $feedItem->title }}</a></h4>
+                    <h4 class="feed-item-title"><a target="_blank" href="{{ route('outbound.go', ['id' => $feedItem->id]) }}">{{ $feedItem->title }}</a></h4>
                     <p class="feed-item-description">{{ $feedItem->description }}</p>
                 </div>
                 <div class="col-auto feed-item-date d-flex flex-column align-items-end">

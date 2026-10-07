@@ -11,7 +11,7 @@
         @foreach ($items as $item)
             <item>
                 <title>{{ $item->title }}</title>
-                <link>{{ $item->url }}</link>
+                <link>{{ route('outbound.go', ['id' => $item->id]) }}</link>
                 <guid>{{ $item->guid ?: $item->url }}</guid>
                 @if ($item->published_at)
                     <pubDate>{{ $item->published_at->toRssString() }}</pubDate>

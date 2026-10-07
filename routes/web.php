@@ -1,11 +1,17 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OutboundController;
 use App\Http\Controllers\RssController;
 use App\Http\Controllers\SystemInfoController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/ru'); // In future, middleware will be used.
+
+// Outbound intermediate redirect
+Route::get('/go/{id}', [OutboundController::class, 'go'])
+    ->whereNumber('id')
+    ->name('outbound.go');
 
 // Language group
 Route::group(['prefix' => '{lang}', 'where' => ['lang' => '[a-zA-Z]{2}']], function () {

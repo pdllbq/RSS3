@@ -27,3 +27,5 @@ Homestead.yaml
 Thumbs.db
 /database/seeders/AiProviderSeeder.php
 /database/seeders/AiModelSeeder.php
+/project-structure-guide.md
+/GEMINI.md

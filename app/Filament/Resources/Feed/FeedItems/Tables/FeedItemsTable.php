@@ -49,6 +49,10 @@ class FeedItemsTable
                     ->searchable(),
                 IconColumn::make('is_read')
                     ->boolean(),
+                TextColumn::make('clicks_count')
+                    ->counts('clicks')
+                    ->label('Clicks')
+                    ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
