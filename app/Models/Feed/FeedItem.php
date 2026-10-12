@@ -123,4 +123,38 @@ class FeedItem extends Model
             },
         );
     }
+
+    public static function detectMimeType(?string $url): string
+    {
+        if (empty($url)) {
+            return 'image/jpeg';
+        }
+
+        $path = parse_url($url, PHP_URL_PATH) ?? '';
+        $extension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+
+        return match ($extension) {
+            'jpg', 'jpeg' => 'image/jpeg',
+            'png' => 'image/png',
+            'webp' => 'image/webp',
+            'gif' => 'image/gif',
+            'svg' => 'image/svg+xml',
+            'avif' => 'image/avif',
+            default => 'image/jpeg',
+        };
+    }
+
+    protected function rssImageUrl(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->image_url ?: (config('feed.placeholder_image_url') ?: asset('images/placeholder.png')),
+        );
+    }
+
+    protected function rssImageMimeType(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => self::detectMimeType($this->rss_image_url),
+        );
+    }
 }

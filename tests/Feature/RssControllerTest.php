@@ -143,18 +143,85 @@ class RssControllerTest extends TestCase
             ->assertNotFound();
     }
 
+    public function test_it_includes_image_enclosure_and_media_content_when_image_is_present(): void
+    {
+        $source = FeedSource::create([
+            'custom_title' => 'Source',
+            'url' => 'https://example.com/feed.xml',
+            'language' => 'ru',
+        ]);
+
+        $category = GlobalCategory::create([
+            'name' => 'News',
+            'slug' => 'news',
+            'language' => 'ru',
+        ]);
+
+        $item = $this->createDisplayableItem(
+            $source,
+            $category,
+            'ru',
+            'Item with image',
+            now(),
+            'https://example.com/photos/main-article.webp',
+        );
+
+        $response = $this->get('/ru/rss');
+
+        $response
+            ->assertOk()
+            ->assertSee('xmlns:media="http://search.yahoo.com/mrss/"', false)
+            ->assertSee('<enclosure url="https://example.com/photos/main-article.webp" length="0" type="image/webp" />', false)
+            ->assertSee('<media:content url="https://example.com/photos/main-article.webp" medium="image" type="image/webp" />', false);
+    }
+
+    public function test_it_uses_placeholder_image_when_item_has_no_image(): void
+    {
+        $source = FeedSource::create([
+            'custom_title' => 'Source',
+            'url' => 'https://example.com/feed.xml',
+            'language' => 'ru',
+        ]);
+
+        $category = GlobalCategory::create([
+            'name' => 'News',
+            'slug' => 'news',
+            'language' => 'ru',
+        ]);
+
+        $item = $this->createDisplayableItem(
+            $source,
+            $category,
+            'ru',
+            'Item without image',
+            now(),
+            null,
+        );
+
+        $placeholderUrl = asset('images/placeholder.png');
+
+        $response = $this->get('/ru/rss');
+
+        $response
+            ->assertOk()
+            ->assertSee('<enclosure url="'.$placeholderUrl.'" length="0" type="image/png" />', false)
+            ->assertSee('<media:content url="'.$placeholderUrl.'" medium="image" type="image/png" />', false);
+    }
+
     private function createDisplayableItem(
         FeedSource $source,
         GlobalCategory $category,
         string $language,
         string $title,
         mixed $publishedAt,
+        ?string $imageUrl = null,
     ): FeedItem {
         return FeedItem::create([
             'feed_source_id' => $source->id,
             'guid' => 'guid-'.str($title)->slug(),
             'title' => $title,
             'url' => 'https://example.com/'.str($title)->slug(),
+            'image_url' => $imageUrl,
             'description' => $title.' description',
             'language' => $language,
             'published_at' => $publishedAt,
