@@ -29,6 +29,7 @@ class SetManualGlobalCategoryAction
             'global_category_id' => $category->getKey(),
             'is_category_checked' => true,
             'needs_category_check' => false,
+            'is_manually_categorized' => true,
         ])->save();
     }
 
@@ -38,6 +39,7 @@ class SetManualGlobalCategoryAction
             'global_category_id' => null,
             'is_category_checked' => true,
             'needs_category_check' => false,
+            'is_manually_categorized' => true,
         ])->save();
     }
 }

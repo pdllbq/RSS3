@@ -39,6 +39,7 @@ class SetManualGlobalCategoryActionTest extends TestCase
             'global_category_id' => 7,
             'is_category_checked' => true,
             'needs_category_check' => false,
+            'is_manually_categorized' => true,
         ])->once()->andReturnSelf();
         $item->shouldReceive('save')->once();
 
@@ -75,6 +76,7 @@ class SetManualGlobalCategoryActionTest extends TestCase
             'global_category_id' => null,
             'is_category_checked' => true,
             'needs_category_check' => false,
+            'is_manually_categorized' => true,
         ])->once()->andReturnSelf();
         $item->shouldReceive('save')->once();
 

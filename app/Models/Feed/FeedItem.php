@@ -34,6 +34,7 @@ class FeedItem extends Model
         'is_cluster_main',
         'is_category_checked',
         'needs_category_check',
+        'is_manually_categorized',
     ];
 
     protected $casts = [
@@ -44,6 +45,7 @@ class FeedItem extends Model
         'is_read' => 'boolean',
         'is_category_checked' => 'boolean',
         'needs_category_check' => 'boolean',
+        'is_manually_categorized' => 'boolean',
         'is_cluster_main' => 'boolean',
         'raw_payload' => 'array',
     ];
