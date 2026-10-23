@@ -3,9 +3,9 @@
 namespace App\Filament\Resources\Feed\FeedItemModeration;
 
 use App\Filament\Resources\Feed\FeedItemModeration\Pages\ListFeedItemModeration;
+use App\Filament\Resources\Feed\FeedItemModeration\Tables\FeedItemModerationTable;
 use App\Filament\Resources\Feed\FeedItems\Schemas\FeedItemForm;
 use App\Filament\Resources\Feed\FeedItems\Schemas\FeedItemInfolist;
-use App\Filament\Resources\Feed\FeedItems\Tables\FeedItemsTable;
 use App\Models\Feed\FeedItem;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -23,7 +23,7 @@ class FeedItemModerationResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $navigationLabel = 'Category moderation';
+    protected static ?string $navigationLabel = 'Items for moderation';
 
     protected static ?string $modelLabel = 'item for moderation';
 
@@ -55,7 +55,7 @@ class FeedItemModerationResource extends Resource
 
     public static function table(Table $table): Table
     {
-        return FeedItemsTable::configure($table);
+        return FeedItemModerationTable::configure($table);
     }
 
     public static function getEloquentQuery(): Builder

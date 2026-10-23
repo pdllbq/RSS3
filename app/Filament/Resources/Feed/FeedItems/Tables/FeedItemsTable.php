@@ -24,7 +24,8 @@ class FeedItemsTable
     {
         return $table
             ->columns([
-                TextColumn::make('feedSource.id')
+                TextColumn::make('feedSource.source_title')
+                    ->label('Source')
                     ->searchable(),
                 TextColumn::make('guid')
                     ->searchable(),
@@ -77,6 +78,7 @@ class FeedItemsTable
                         Select::make('global_category_id')
                             ->label('Global category')
                             ->options(fn (FeedItem $record): array => FeedItemForm::globalCategoryOptions($record->language))
+                            ->default(fn (FeedItem $record): ?int => $record->global_category_id)
                             ->required()
                             ->searchable()
                             ->preload(),
