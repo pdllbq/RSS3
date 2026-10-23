@@ -69,16 +69,25 @@ class FeedItemModerationTable
                     ->sortable(),
 
                 TextColumn::make('globalCategory.name')
-                    ->label('Suggested / Current')
+                    ->label('Category')
                     ->formatStateUsing(function (FeedItem $record): string {
-                        if (! $record->globalCategory) {
-                            return 'None';
+                        if ($record->globalCategory) {
+                            return ($record->needs_category_check ? '⚠ ' : '').$record->globalCategory->path;
                         }
 
-                        return $record->globalCategory->path;
+                        if ($record->needs_category_check) {
+                            return 'Needs check';
+                        }
+
+                        return $record->is_category_checked ? 'No category' : 'Unchecked';
                     })
                     ->badge()
-                    ->color(fn (FeedItem $record): string => $record->global_category_id ? 'warning' : 'gray'),
+                    ->color(fn (FeedItem $record): string => match (true) {
+                        $record->needs_category_check => 'warning',
+                        $record->global_category_id !== null => 'success',
+                        $record->is_category_checked => 'gray',
+                        default => 'danger',
+                    }),
 
                 TextColumn::make('published_at')
                     ->label('Published')

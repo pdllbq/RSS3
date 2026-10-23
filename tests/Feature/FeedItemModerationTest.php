@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Domain\Feed\Actions\SetManualGlobalCategoryAction;
 use App\Filament\Resources\Feed\FeedItemModeration\FeedItemModerationResource;
+use App\Filament\Resources\Feed\FeedItemModeration\Pages\ListFeedItemModeration;
 use App\Models\Feed\FeedItem;
 use App\Models\Feed\FeedSource;
 use App\Models\Feed\GlobalCategory;
@@ -14,7 +15,7 @@ class FeedItemModerationTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_moderation_query_only_includes_items_needing_category_check(): void
+    public function test_navigation_badge_shows_count_of_items_needing_check(): void
     {
         $feedSource = FeedSource::create([
             'custom_title' => 'Test Source',
@@ -23,7 +24,7 @@ class FeedItemModerationTest extends TestCase
             'is_active' => true,
         ]);
 
-        $needingCheck = FeedItem::forceCreate([
+        FeedItem::forceCreate([
             'feed_source_id' => $feedSource->id,
             'guid' => 'test-guid-1',
             'title' => 'Test article 1',
@@ -33,7 +34,7 @@ class FeedItemModerationTest extends TestCase
             'is_category_checked' => true,
         ]);
 
-        $notNeedingCheck = FeedItem::forceCreate([
+        FeedItem::forceCreate([
             'feed_source_id' => $feedSource->id,
             'guid' => 'test-guid-2',
             'title' => 'Test article 2',
@@ -43,17 +44,60 @@ class FeedItemModerationTest extends TestCase
             'is_category_checked' => true,
         ]);
 
-        $queryIds = FeedItemModerationResource::getEloquentQuery()->pluck('id')->all();
-
-        $this->assertContains($needingCheck->id, $queryIds);
-        $this->assertNotContains($notNeedingCheck->id, $queryIds);
-
-        $needingCheck->delete();
-        $notNeedingCheck->delete();
-        $feedSource->delete();
+        $this->assertSame('1', FeedItemModerationResource::getNavigationBadge());
     }
 
-    public function test_setting_category_removes_item_from_moderation(): void
+    public function test_moderation_page_tabs_and_queries(): void
+    {
+        $feedSource = FeedSource::create([
+            'custom_title' => 'Test Source',
+            'url' => 'https://example.com/rss-tabs',
+            'language' => 'ru',
+            'is_active' => true,
+        ]);
+
+        $needingCheck = FeedItem::forceCreate([
+            'feed_source_id' => $feedSource->id,
+            'guid' => 'test-guid-need',
+            'title' => 'Needs Check Article',
+            'url' => 'https://example.com/need',
+            'language' => 'ru',
+            'needs_category_check' => true,
+            'is_category_checked' => true,
+        ]);
+
+        $notNeedingCheck = FeedItem::forceCreate([
+            'feed_source_id' => $feedSource->id,
+            'guid' => 'test-guid-not-need',
+            'title' => 'Regular Article',
+            'url' => 'https://example.com/not-need',
+            'language' => 'ru',
+            'needs_category_check' => false,
+            'is_category_checked' => false,
+        ]);
+
+        $page = new ListFeedItemModeration;
+        $tabs = $page->getTabs();
+
+        $this->assertArrayHasKey('needs_moderation', $tabs);
+        $this->assertArrayHasKey('all_recent', $tabs);
+
+        // Check needs_moderation tab query
+        $needsQuery = $tabs['needs_moderation']->modifyQuery(FeedItem::query());
+        $needsIds = $needsQuery->pluck('id')->all();
+
+        $this->assertContains($needingCheck->id, $needsIds);
+        $this->assertNotContains($notNeedingCheck->id, $needsIds);
+
+        // Check all_recent tab query
+        $allQuery = $tabs['all_recent']->modifyQuery(FeedItem::query());
+        $allIds = $allQuery->pluck('id')->all();
+
+        $this->assertContains($needingCheck->id, $allIds);
+        $this->assertContains($notNeedingCheck->id, $allIds);
+    }
+
+    public function test_setting_category_removes_item_from_moderation_queue(): void
     {
         $feedSource = FeedSource::create([
             'custom_title' => 'Test Source',
@@ -87,12 +131,47 @@ class FeedItemModerationTest extends TestCase
         $this->assertTrue($item->is_category_checked);
         $this->assertSame($category->id, $item->global_category_id);
 
-        $queryIds = FeedItemModerationResource::getEloquentQuery()->pluck('id')->all();
-        $this->assertNotContains($item->id, $queryIds);
+        $page = new ListFeedItemModeration;
+        $needsTab = $page->getTabs()['needs_moderation'];
+        $needsIds = $needsTab->modifyQuery(FeedItem::query())->pluck('id')->all();
 
-        $item->delete();
-        $category->delete();
-        $feedSource->delete();
+        $this->assertNotContains($item->id, $needsIds);
+    }
+
+    public function test_setting_category_on_item_not_marked_for_moderation(): void
+    {
+        $feedSource = FeedSource::create([
+            'custom_title' => 'Test Source',
+            'url' => 'https://example.com/rss-recent',
+            'language' => 'ru',
+            'is_active' => true,
+        ]);
+
+        $category = GlobalCategory::forceCreate([
+            'name' => 'Leaf Category 2',
+            'slug' => 'leaf-category-test-2',
+            'language' => 'ru',
+        ]);
+
+        // Item from the all_recent tab that wasn't flagged for moderation
+        $item = FeedItem::forceCreate([
+            'feed_source_id' => $feedSource->id,
+            'guid' => 'test-guid-recent-1',
+            'title' => 'Recent unchecked article',
+            'url' => 'https://example.com/recent-1',
+            'language' => 'ru',
+            'needs_category_check' => false,
+            'is_category_checked' => false,
+        ]);
+
+        $action = app(SetManualGlobalCategoryAction::class);
+        $action->execute($item, $category->id);
+
+        $item->refresh();
+
+        $this->assertFalse($item->needs_category_check);
+        $this->assertTrue($item->is_category_checked);
+        $this->assertSame($category->id, $item->global_category_id);
     }
 
     public function test_skipping_category_removes_item_from_moderation(): void
@@ -123,10 +202,10 @@ class FeedItemModerationTest extends TestCase
         $this->assertTrue($item->is_category_checked);
         $this->assertNull($item->global_category_id);
 
-        $queryIds = FeedItemModerationResource::getEloquentQuery()->pluck('id')->all();
-        $this->assertNotContains($item->id, $queryIds);
+        $page = new ListFeedItemModeration;
+        $needsTab = $page->getTabs()['needs_moderation'];
+        $needsIds = $needsTab->modifyQuery(FeedItem::query())->pluck('id')->all();
 
-        $item->delete();
-        $feedSource->delete();
+        $this->assertNotContains($item->id, $needsIds);
     }
 }

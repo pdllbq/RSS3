@@ -21,7 +21,9 @@ class FeedSourceResource extends Resource
 {
     protected static ?string $model = FeedSource::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRss;
+
+    protected static ?int $navigationSort = 3;
 
     protected static ?string $navigationLabel = 'Feed sources';
 

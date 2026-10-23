@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Filament\Resources\Ai\AiProviders;
 
 use App\Filament\Resources\Ai\AiProviders\Pages\CreateAiProvider;
@@ -10,19 +11,21 @@ use App\Filament\Resources\Ai\AiProviders\Schemas\AiProviderInfolist;
 use App\Filament\Resources\Ai\AiProviders\Tables\AiProvidersTable;
 use App\Models\Ai\AiProvider;
 use BackedEnum;
-use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class AiProviderResource extends Resource
 {
     protected static ?string $model = AiProvider::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
-
     protected static string|UnitEnum|null $navigationGroup = 'AI';
+
+    protected static ?int $navigationSort = 3;
+
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCloud;
 
     public static function form(Schema $schema): Schema
     {

@@ -21,7 +21,9 @@ class FeedItemModerationResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = 'Feeds';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static ?int $navigationSort = 1;
+
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCheckBadge;
 
     protected static ?string $navigationLabel = 'Items for moderation';
 
@@ -33,7 +35,7 @@ class FeedItemModerationResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        $count = static::getEloquentQuery()->count();
+        $count = static::getModel()::where('needs_category_check', true)->count();
 
         return $count > 0 ? (string) $count : null;
     }
@@ -60,8 +62,7 @@ class FeedItemModerationResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()
-            ->where('needs_category_check', true);
+        return parent::getEloquentQuery();
     }
 
     public static function getRelations(): array
