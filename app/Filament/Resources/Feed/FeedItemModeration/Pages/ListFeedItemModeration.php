@@ -26,7 +26,13 @@ class ListFeedItemModeration extends ListRecords
                 ->badgeColor('warning'),
 
             'all_recent' => Tab::make('All recent articles')
-                ->badge(fn () => FeedItem::count() ?: null),
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('is_manually_categorized', false))
+                ->badge(fn () => FeedItem::where('is_manually_categorized', false)->count() ?: null),
+
+            'manually_moderated' => Tab::make('Manually moderated')
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('is_manually_categorized', true))
+                ->badge(fn () => FeedItem::where('is_manually_categorized', true)->count() ?: null)
+                ->badgeColor('success'),
         ];
     }
 }
